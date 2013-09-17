@@ -6,12 +6,71 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="~/Content/bootstrap/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="~/Content/styles/listStyles.css" rel="stylesheet"/>
+    <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.10.3.min.js"></script>
+    <script src="~/Scripts/jQuery.tmpl.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
     <title>Index</title>
+    <script >
+        var markup = "<div><p>${text}</p><button type='button' class='btn btn-danger'>X</button></div>";
+        $.template("taskCard", markup);
+    </script>
 </head>
 <body>
-    <div>
-        <p>There will be ToDoList!</p>
+    <div class="row">
+        <div id="todo" class="col-md-4 todoColumn">
+            ToDo
+            <button class="btn btn-success" data-toggle="modal" data-target="#newTask">+</button>
+        </div>
+        <div id="doing" class="col-md-4 doingColumn">
+            Doing
+        </div>
+        <div id="done" class="col-md-4 doneColumn">
+            Done
+        </div>
     </div>
+
+    <div class="modal fade" id="newTask" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Новая задача</h4>
+                </div>
+                <div class="modal-body">
+                    <textarea id="taskText" class="form-control" rows="3" placeholder="Введите описание задачи..."></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button id="addTask" type="button" class="btn btn-success" data-dismiss="modal">Добавить</button>
+                    <button id="dismiss" type="button" class="btn btn-danger" data-dismiss="modal">Отменить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $("#addTask").click(function(event) {
+                event.preventDefault();
+                addTask();
+            });
+            
+            $("#dismiss").click(function (event) {
+                event.preventDefault();
+                $("#taskText").val("");
+            });
+
+            function addTask() {
+                var taskText = $("#taskText").val();
+                $("#taskText").val("");
+                var jsonFormat = '{"text":' + '"' + taskText + '"' + '}';
+                var taskJson = jQuery.parseJSON(jsonFormat);
+                $.tmpl("taskCard", taskJson).appendTo("#todo");
+            }
+        });
+    </script>
+
 </body>
 </html>

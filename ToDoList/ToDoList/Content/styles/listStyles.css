@@ -1,0 +1,16 @@
+﻿.todoColumn {
+    background-color: #cd5c5c;
+}
+
+.doingColumn {
+    background-color: #e9967a;
+}
+
+.doneColumn {
+    background-color: #00fa9a;
+}
+
+#todoColumn, #doingColumn, #doneColumn {
+    margin-bottom: -9999px;
+    padding-bottom: 9999px;
+}

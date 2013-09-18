@@ -9,27 +9,28 @@
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="~/Content/bootstrap/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="~/Content/styles/listStyles.css" rel="stylesheet"/>
+    <link href="~/Content/styles/taskStyle.css" rel="stylesheet"/>
     <script src="~/Scripts/jquery-1.9.1.min.js"></script>
     <script src="~/Scripts/jquery-ui-1.10.3.min.js"></script>
     <script src="~/Scripts/jQuery.tmpl.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
     <title>Index</title>
     <script >
-        var markup = "<div><p>${text}</p><button type='button' class='btn btn-danger'>X</button></div>";
+        var markup = "<div id='${id}' class='card'><p><b>${id}<b></p><p>${text}</p><button type='button' class='btn btn-danger'>&times</button></div>";
         $.template("taskCard", markup);
     </script>
 </head>
 <body>
     <div class="row">
         <div id="todo" class="col-md-4 todoColumn">
-            ToDo
-            <button class="btn btn-success" data-toggle="modal" data-target="#newTask">+</button>
+            <p><b>ToDo</b></p>
+            <button class="btn btn-success" data-toggle="modal" data-target="#newTask">Добавить задачу</button>
         </div>
         <div id="doing" class="col-md-4 doingColumn">
-            Doing
+            <p><b>Doing</b></p>
         </div>
         <div id="done" class="col-md-4 doneColumn">
-            Done
+            <p><b>Done</b></p>
         </div>
     </div>
 
@@ -63,11 +64,12 @@
             });
 
             function addTask() {
+                var serviceUrl = "@Url.Action("SaveTask", "Home")";
                 var taskText = $("#taskText").val();
                 $("#taskText").val("");
-                var jsonFormat = '{"text":' + '"' + taskText + '"' + '}';
-                var taskJson = jQuery.parseJSON(jsonFormat);
-                $.tmpl("taskCard", taskJson).appendTo("#todo");
+                $.post(serviceUrl, { taskText: taskText }).success(function (data) {
+                    $.tmpl("taskCard", data).appendTo("#todo");
+                });
             }
         });
     </script>

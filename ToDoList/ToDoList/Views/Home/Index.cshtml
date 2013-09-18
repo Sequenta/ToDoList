@@ -12,11 +12,15 @@
     <link href="~/Content/styles/taskStyle.css" rel="stylesheet"/>
     <script src="~/Scripts/jquery-1.9.1.min.js"></script>
     <script src="~/Scripts/jquery-ui-1.10.3.min.js"></script>
+    <script src="~/Scripts/dragging.js"></script>
     <script src="~/Scripts/jQuery.tmpl.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
     <title>Index</title>
     <script >
-        var markup = "<div id='${id}' class='card'><p><b>${id}<b></p><p>${text}</p><button type='button' class='btn btn-danger'>&times</button></div>";
+        var markup = "<div id='${id}' class='ui-widget-content ui-draggable card'>" +
+                        "<p><b>${id}<b></p><p>${text}</p>" +
+                        "<button id='done-${id}' type='button' class='btn btn-danger'>&times</button>" +
+                     "</div>";
         $.template("taskCard", markup);
     </script>
 </head>
@@ -53,6 +57,10 @@
 
     <script>
         $(document).ready(function () {
+            $("#todo").sortable({ connectWith: ".col-md-4" });
+            $("#doing").sortable({ connectWith: ".col-md-4" });
+            $("#done").sortable({ connectWith: ".col-md-4" });
+            
             $("#addTask").click(function(event) {
                 event.preventDefault();
                 addTask();
@@ -69,9 +77,23 @@
                 $("#taskText").val("");
                 $.post(serviceUrl, { taskText: taskText }).success(function (data) {
                     $.tmpl("taskCard", data).appendTo("#todo");
+                    $('.card').drags();
                 });
             }
         });
+        
+        $(document).on('click', "button[id*='done']",removeTask);
+        
+        function removeTask(event) {
+            event.preventDefault();
+            var taskId = event.target.id.toString();
+            taskId = taskId.replace("done-", "");
+            var serviceUrl = "@Url.Action("RemoveTask", "Home")";
+            $.post(serviceUrl, { taskId: taskId }).success(function () {
+                var selector = "div[id='" + taskId + "']";
+                $(selector).remove();
+            });
+        }
     </script>
 
 </body>

@@ -227,6 +227,10 @@
       <Project>{06c7e65c-1be9-4bd3-908c-a1a27f5af64d}</Project>
       <Name>ToDoList.DataAccess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ToDoList.Domain\ToDoList.Domain.csproj">
+      <Project>{b0fe825b-fdee-4841-9199-4677f90bcf5f}</Project>
+      <Name>ToDoList.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

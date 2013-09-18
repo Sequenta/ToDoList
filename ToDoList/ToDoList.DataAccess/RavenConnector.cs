@@ -1,4 +1,5 @@
-﻿using Raven.Client.Document;
+﻿using Raven.Abstractions.Commands;
+using Raven.Client.Document;
 using ToDoList.Domain;
 
 namespace ToDoList.DataAccess
@@ -22,11 +23,11 @@ namespace ToDoList.DataAccess
             }
         }
 
-        public void Delete(Task task)
+        public void Delete(string taskId)
         {
             using (var session = store.OpenSession(DatabaseName))
             {
-                session.Delete(task);
+                session.Advanced.Defer(new DeleteCommandData { Key = taskId });
                 session.SaveChanges();
             }
         }

@@ -1,0 +1,18 @@
+﻿.todoColumn {
+    background-color: #cd5c5c;
+    height: 768px;
+}
+
+.doingColumn {
+    background-color: #e9967a;
+    height: 768px;
+}
+
+.doneColumn {
+    background-color: #00fa9a;
+    height: 768px;
+}
+
+p {
+    text-align: center;  
+}

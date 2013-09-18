@@ -6,12 +6,109 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="~/Content/bootstrap/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="~/Content/styles/listStyles.css" rel="stylesheet"/>
+    <link href="~/Content/styles/taskStyle.css" rel="stylesheet"/>
+    <script src="~/Scripts/jquery-1.9.1.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.10.3.min.js"></script>
+    <script src="~/Scripts/dragging.js"></script>
+    <script src="~/Scripts/jQuery.tmpl.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
     <title>Index</title>
+    <script >
+        var markup = "<div id='${id}' class='ui-widget-content ui-draggable card'>" +
+                        "<p><b>${id}<b></p><p>${text}</p>" +
+                        "<button id='done-${id}' type='button' class='btn btn-danger'>&times</button>" +
+                     "</div>";
+        $.template("taskCard", markup);
+    </script>
 </head>
-<body>
-    <div>
-        <p>There will be ToDoList!</p>
-    </div>
-</body>
+    <body style="background-color: #e0ffff">
+        <div style ="text-align: center"class="row">
+            <h1>
+                <img src="~/Content/images/logo.jpeg" alt="logo" />ToDoList
+            </h1>
+            <p>Ничего не забудь!</p>
+        </div>
+        <div style="text-align: center" class="row">
+            <button class="btn btn-lg btn-success" data-toggle="modal" data-target="#newTask">Добавить задачу</button>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <p><b>Нужно сделать</b></p>
+                <div id="todo" class="col-md-12 todoColumn">
+                </div>
+            </div>              
+            <div class="col-md-4">
+                <p><b>В процессе...</b></p>
+                <div id="doing" class="col-md-12 doingColumn">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <p><b>Сделано!</b></p>
+                <div id="done" class="col-md-12 doneColumn">
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="newTask" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Новая задача</h4>
+                    </div>
+                    <div class="modal-body">
+                        <textarea id="taskText" class="form-control" rows="3" placeholder="Введите описание задачи..."></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="addTask" type="button" class="btn btn-success" data-dismiss="modal">Добавить</button>
+                        <button id="dismiss" type="button" class="btn btn-danger" data-dismiss="modal">Отменить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            $(document).ready(function () {
+                $("#todo").sortable({ connectWith: ".col-md-12" });
+                $("#doing").sortable({ connectWith: ".col-md-12" });
+                $("#done").sortable({ connectWith: ".col-md-12" });
+            
+                $("#addTask").click(function(event) {
+                    event.preventDefault();
+                    addTask();
+                });
+            
+                $("#dismiss").click(function (event) {
+                    event.preventDefault();
+                    $("#taskText").val("");
+                });
+
+                function addTask() {
+                    var serviceUrl = "@Url.Action("SaveTask", "Home")";
+                    var taskText = $("#taskText").val();
+                    $("#taskText").val("");
+                    $.post(serviceUrl, { taskText: taskText }).success(function (data) {
+                        $.tmpl("taskCard", data).appendTo("#todo");
+                        $('.card').drags();
+                    });
+                }
+            });
+        
+            $(document).on('click', "button[id*='done']",removeTask);
+        
+            function removeTask(event) {
+                event.preventDefault();
+                var taskId = event.target.id.toString();
+                taskId = taskId.replace("done-", "");
+                var serviceUrl = "@Url.Action("RemoveTask", "Home")";
+                $.post(serviceUrl, { taskId: taskId }).success(function () {
+                    var selector = "div[id='" + taskId + "']";
+                    $(selector).remove();
+                });
+            }
+        </script>
+
+    </body>
 </html>

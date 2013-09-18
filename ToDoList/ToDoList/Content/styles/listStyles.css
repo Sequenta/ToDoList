@@ -1,16 +1,18 @@
 ﻿.todoColumn {
     background-color: #cd5c5c;
+    height: 768px;
 }
 
 .doingColumn {
     background-color: #e9967a;
+    height: 768px;
 }
 
 .doneColumn {
     background-color: #00fa9a;
+    height: 768px;
 }
 
-#todoColumn, #doingColumn, #doneColumn {
-    margin-bottom: -9999px;
-    padding-bottom: 9999px;
+p {
+    text-align: center;  
 }

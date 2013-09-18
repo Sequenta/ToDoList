@@ -26,15 +26,21 @@
 </head>
 <body>
     <div class="row">
-        <div id="todo" class="col-md-4 todoColumn">
+        <div class="col-md-4 todoColumn">
             <p><b>ToDo</b></p>
-            <button class="btn btn-success" data-toggle="modal" data-target="#newTask">Добавить задачу</button>
+                <button class="btn btn-success" data-toggle="modal" data-target="#newTask">Добавить задачу</button>
+            <div id="todo" class="col-md-12 todoColumn">
+            </div>
         </div>
-        <div id="doing" class="col-md-4 doingColumn">
+        <div class="col-md-4 doingColumn">
             <p><b>Doing</b></p>
+            <div id="doing" class="col-md-12 doingColumn">
+            </div>
         </div>
-        <div id="done" class="col-md-4 doneColumn">
-            <p><b>Done</b></p>
+        <div class="col-md-4 doneColumn">
+             <p><b>Done</b></p>
+            <div id="done" class="col-md-12 doneColumn">
+            </div>
         </div>
     </div>
 
@@ -57,9 +63,9 @@
 
     <script>
         $(document).ready(function () {
-            $("#todo").sortable({ connectWith: ".col-md-4" });
-            $("#doing").sortable({ connectWith: ".col-md-4" });
-            $("#done").sortable({ connectWith: ".col-md-4" });
+            $("#todo").sortable({ connectWith: ".col-md-12" });
+            $("#doing").sortable({ connectWith: ".col-md-12" });
+            $("#done").sortable({ connectWith: ".col-md-12" });
             
             $("#addTask").click(function(event) {
                 event.preventDefault();

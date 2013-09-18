@@ -32,5 +32,10 @@ namespace ToDoList.Controllers
             };
             return Json(jsonResult, JsonRequestBehavior.AllowGet);
         }
+
+        public void RemoveTask(string taskId)
+        {
+            databaseConnector.Delete(taskId);
+        }
     }
 }
